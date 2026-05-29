@@ -12,6 +12,8 @@ dotfiles/
 │   │   ├── keybindings.json     - keyboard shortcuts
 │   │   ├── extensions.txt       - one extension ID per line (e.g. ms-python.python)
 │   │   └── snippets/            - custom code snippets (if any)
+│   ├── claude/
+│   │   └── statusline-command.py - Claude Code status line script (model, ctx%, cost, rate limits)
 │   └── scripts/
 │       ├── setup.ps1            - run once on a new Windows machine to apply all configs
 │       └── update-extensions.ps1 - updates extensions only if N days have passed since release
@@ -53,6 +55,7 @@ Run manually whenever you want to update — only updates extensions released mo
 | `windows/vscode/extensions.txt` | Add/remove extension IDs you want on every machine |
 | `windows/scripts/setup.ps1` | Change where files get copied, add new tools to install |
 | `windows/scripts/update-extensions.ps1` | Change the day threshold (default: 7 days) |
+| `windows/claude/statusline-command.py` | Add/remove sections in the Claude Code status line |
 
 ## Notes
 
