@@ -8,3 +8,4 @@ ms-python.debugpy
 ms-python.vscode-python-envs
 charliermarsh.ruff
 eamodio.gitlens
+anthropic.claude-code
