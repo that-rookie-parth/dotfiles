@@ -3,6 +3,8 @@ import sys
 import io
 import json
 import math
+import os
+import re
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 sys.stdin  = io.TextIOWrapper(sys.stdin.buffer,  encoding="utf-8")
@@ -18,6 +20,34 @@ yellow = lambda t: colored(t, "0;33")
 green  = lambda t: colored(t, "0;32")
 red    = lambda t: colored(t, "0;31")
 dim    = lambda t: colored(t, "2")
+orange = lambda t: colored(t, "38;5;172")
+
+def caveman_badge():
+    claude_dir = os.environ.get("CLAUDE_CONFIG_DIR", os.path.expanduser("~/.claude"))
+    flag = os.path.join(claude_dir, ".caveman-active")
+    if os.path.islink(flag) or not os.path.isfile(flag):
+        return None
+    try:
+        raw = open(flag, "r").read(64).strip().lower()
+        mode = re.sub(r"[^a-z0-9-]", "", raw)
+    except Exception:
+        return None
+    valid = {"off", "lite", "full", "ultra", "wenyan-lite", "wenyan", "wenyan-full", "wenyan-ultra", "commit", "review", "compress"}
+    if mode not in valid:
+        return None
+    label = "[CAVEMAN]" if mode in ("full", "") else f"[CAVEMAN:{mode.upper()}]"
+    badge = orange(label)
+    savings_file = os.path.join(claude_dir, ".caveman-statusline-suffix")
+    if os.environ.get("CAVEMAN_STATUSLINE_SAVINGS", "1") != "0":
+        if os.path.isfile(savings_file) and not os.path.islink(savings_file):
+            try:
+                suffix = open(savings_file, "r").read(64)
+                suffix = re.sub(r"[\x00-\x1f]", "", suffix).strip()
+                if suffix:
+                    badge += " " + orange(suffix)
+            except Exception:
+                pass
+    return badge
 
 try:
     data = json.load(sys.stdin)
@@ -25,6 +55,11 @@ except Exception:
     sys.exit(0)
 
 parts = []
+
+# Caveman badge
+badge = caveman_badge()
+if badge:
+    parts.append(badge)
 
 # Model name
 model = (data.get("model") or {}).get("display_name", "Unknown")
