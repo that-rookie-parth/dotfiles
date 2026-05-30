@@ -7,3 +7,4 @@ ms-vscode-remote.remote-ssh-edit
 ms-vscode.remote-explorer
 ms-vscode-remote.remote-wsl
 eamodio.gitlens
+pkief.material-icon-theme

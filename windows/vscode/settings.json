@@ -1,0 +1,5 @@
+{
+    "extensions.autoUpdate": false,
+    "extensions.autoCheckUpdates": false,
+    "workbench.iconTheme": "material-icon-theme"
+}
