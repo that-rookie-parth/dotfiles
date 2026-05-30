@@ -1,0 +1,10 @@
+# WSL (Ubuntu-side) VS Code extensions
+# These run on the VS Code server inside WSL
+# Add one extension ID per line, e.g. publisher.extensionname
+
+ms-python.python
+ms-python.vscode-pylance
+ms-python.debugpy
+ms-python.vscode-python-envs
+charliermarsh.ruff
+eamodio.gitlens

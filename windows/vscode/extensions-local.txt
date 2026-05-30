@@ -1,0 +1,9 @@
+# Local (Windows-side) VS Code extensions
+# These run on the Windows VS Code client
+# Add one extension ID per line, e.g. publisher.extensionname
+
+ms-vscode-remote.remote-ssh
+ms-vscode-remote.remote-ssh-edit
+ms-vscode.remote-explorer
+ms-vscode-remote.remote-wsl
+eamodio.gitlens
