@@ -8,10 +8,11 @@ Personal configuration files for Windows and Linux machines.
 dotfiles/
 ├── windows/
 │   ├── vscode/
-│   │   ├── settings.json        - VS Code preferences
-│   │   ├── keybindings.json     - keyboard shortcuts
-│   │   ├── extensions.txt       - one extension ID per line (e.g. ms-python.python)
-│   │   └── snippets/            - custom code snippets (if any)
+│   │   ├── settings.json          - VS Code preferences
+│   │   ├── keybindings.json       - keyboard shortcuts
+│   │   ├── extensions-local.txt   - extensions installed on Windows (Remote SSH, GitLens, etc.)
+│   │   ├── extensions-wsl.txt     - extensions installed inside WSL Ubuntu (Python stack, Claude Code, etc.)
+│   │   └── snippets/              - custom code snippets (if any)
 │   ├── claude/
 │   │   └── statusline-command.py - Claude Code status line script (model, ctx%, cost, rate limits)
 │   └── scripts/
@@ -52,7 +53,8 @@ Run manually whenever you want to update — only updates extensions released mo
 |---|---|
 | `windows/vscode/settings.json` | Editor preferences, theme, font, language-specific settings |
 | `windows/vscode/keybindings.json` | Custom keyboard shortcuts |
-| `windows/vscode/extensions.txt` | Add/remove extension IDs you want on every machine |
+| `windows/vscode/extensions-local.txt` | Add/remove extensions for the Windows VS Code client |
+| `windows/vscode/extensions-wsl.txt` | Add/remove extensions for the WSL Ubuntu VS Code server |
 | `windows/scripts/setup.ps1` | Change where files get copied, add new tools to install |
 | `windows/scripts/update-extensions.ps1` | Change the day threshold (default: 7 days) |
 | `windows/claude/statusline-command.py` | Add/remove sections in the Claude Code status line |
@@ -61,6 +63,6 @@ Run manually whenever you want to update — only updates extensions released mo
 
 - SSH config is NOT tracked here — too many machine-specific paths and server IPs.
   Keep a sanitized `ssh/config.example` if needed in future.
-- Extension binaries are not tracked — only the ID list in `extensions.txt`.
+- Extension binaries are not tracked — only the ID lists in `extensions-local.txt` and `extensions-wsl.txt`.
   The setup script installs them fresh from the marketplace.
 - The `linux/` folder is intentionally empty for now. Add structure when setting up a Linux machine.
