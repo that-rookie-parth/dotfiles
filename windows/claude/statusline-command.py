@@ -35,19 +35,8 @@ def caveman_badge():
     valid = {"off", "lite", "full", "ultra", "wenyan-lite", "wenyan", "wenyan-full", "wenyan-ultra", "commit", "review", "compress"}
     if mode not in valid:
         return None
-    label = "[CAVEMAN]" if mode in ("full", "") else f"[CAVEMAN:{mode.upper()}]"
-    badge = orange(label)
-    savings_file = os.path.join(claude_dir, ".caveman-statusline-suffix")
-    if os.environ.get("CAVEMAN_STATUSLINE_SAVINGS", "1") != "0":
-        if os.path.isfile(savings_file) and not os.path.islink(savings_file):
-            try:
-                suffix = open(savings_file, "r").read(64)
-                suffix = re.sub(r"[\x00-\x1f]", "", suffix).strip()
-                if suffix:
-                    badge += " " + orange(suffix)
-            except Exception:
-                pass
-    return badge
+    label = "⚒ " if mode in ("full", "") else f"⚒ :{mode.upper()}"
+    return orange(label)
 
 try:
     data = json.load(sys.stdin)
@@ -55,20 +44,6 @@ except Exception:
     sys.exit(0)
 
 parts = []
-
-# Caveman badge
-badge = caveman_badge()
-if badge:
-    parts.append(badge)
-
-# Model name
-model = (data.get("model") or {}).get("display_name", "Unknown")
-parts.append(cyan(model))
-
-# Effort level — only on reasoning models
-effort = (data.get("effort") or {}).get("level")
-if effort:
-    parts.append(f"effort:{yellow(effort)}")
 
 # Context usage
 ctx        = data.get("context_window") or {}
@@ -91,6 +66,20 @@ rate    = " ".join(filter(None, [
 ]))
 if rate:
     parts.append(rate)
+
+# Model name
+model = (data.get("model") or {}).get("display_name", "Unknown")
+parts.append(cyan(model))
+
+# Effort level — only on reasoning models
+effort = (data.get("effort") or {}).get("level")
+if effort:
+    parts.append(f"effort:{yellow(effort)}")
+
+# Caveman badge
+badge = caveman_badge()
+if badge:
+    parts.append(badge)
 
 # Session cost
 cost = (data.get("cost") or {}).get("total_cost_usd")
