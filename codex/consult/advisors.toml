@@ -1,6 +1,6 @@
 # Codex-only Consult roster. Never install as ~/.claude/advisors.toml.
 # kind="subagent" excludes GPT seats from the existing OpenRouter runner.
-# The Codex skill/adapter must execute these seats and combine their verdicts.
+# consult.py executes these seats through Codex and combines their verdicts.
 # Model and effort choices apply only to Consult, never the main Codex session.
 
 [defaults]

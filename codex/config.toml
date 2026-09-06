@@ -15,4 +15,7 @@ status_line = [
     "weekly-limit",
     "git-branch",
     "task-progress",
+    "total-input-tokens",
+    "context-window-size",
+    "estimated-thread-cost",
 ]

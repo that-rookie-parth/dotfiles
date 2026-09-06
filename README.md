@@ -1,7 +1,8 @@
 # dotfiles
 
 The new [Codex setup](codex/README.md) lives in `codex/`. Its portable config and
-Consult roster are separate from Claude.
+Consult roster are separate from Claude. Humanizer lives in `shared/skills/humanizer/`
+and is linked into both tools.
 
 Personal configuration files for macOS, Windows, and Linux machines.
 
@@ -34,10 +35,12 @@ dotfiles/
 └── codex/
     ├── AGENTS.md                - link to shared claude/CLAUDE.md
     ├── config.toml              - portable settings; no model defaults
-    ├── consult/advisors.toml    - Codex-only Consult roster
-    ├── README.md                - setup and ownership guide
-    ├── PLAN.md                  - implementation status
-    └── DECISIONS.md             - setup decisions
+    ├── consult/                 - Codex roster and review runner
+    ├── skills/                  - Consult and Handoff skills
+    ├── hooks/                   - GitHub guard and saved context
+    ├── install.py               - repeatable setup with backups
+    ├── check.py                 - offline installation checks
+    └── README.md                - setup and ownership guide
 ```
 
 ## Claude Code plugins
@@ -72,7 +75,8 @@ This repo doubles as a Claude Code plugin marketplace:
 
 ## How to use on a new macOS machine
 
-The Claude Code status line is the only piece wired up on macOS so far.
+For Codex, follow [the Codex installation guide](codex/README.md).
+The steps below configure the Claude Code status line.
 
 1. Clone this repo to `~/personal/dotfiles`.
 
