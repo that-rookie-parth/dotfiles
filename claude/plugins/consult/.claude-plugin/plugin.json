@@ -2,7 +2,7 @@
   "name": "consult",
   "displayName": "Consult — independent model advisors",
   "description": "Second opinions from independent frontier models via OpenRouter. /consult:2nd asks one named advisor; /consult:panel convenes a full panel and forces a decision.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Parth Kulshreshtha",
     "url": "https://github.com/parthkulshreshtha"

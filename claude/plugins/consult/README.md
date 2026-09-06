@@ -91,7 +91,7 @@ names. Bundled defaults:
 | `decision` | sol, grok, gemini, fable | should-we-do-X, strategy calls |
 | `writing` | fable, kimi, sol | posts, docs, comms |
 | `cheap` | glm, deepseek, grok | quick sanity check, ~2 cents |
-| `max` | sol-pro, gemini, grok-45, kimi, fable | irreversible: migrations, auth, public APIs |
+| `max` | astra, gemini, grok-45, kimi, fable | irreversible: migrations, auth, public APIs |
 
 Seats with `web = "native"` search the web on their own initiative (model-driven
 queries only — OpenRouter's exa fallback is deliberately never used because it

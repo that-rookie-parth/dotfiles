@@ -103,10 +103,10 @@ note = "$1.25/$2.50, 1M ctx - different lab entirely, cheapest frontier seat"
 
 [seats.fable]
 kind = "subagent"          # runs on the Claude Max plan, not OpenRouter
-model = "fable"            # OpenRouter lists claude-fable-5 at $10/$50; this seat is free
+model = "fable"            # OpenRouter lists claude-fable-5.1 at $10/$50; this seat is free
 lens = "conformance"
 # No web key: this seat is a Claude Code subagent and already has WebSearch/WebFetch.
-note = "Claude Fable 5 via subagent - composite leader, top writing Elo"
+note = "Claude Fable 5.1 via subagent - composite leader, top writing Elo"
 
 
 # ---------------------------------------------------------------------------
@@ -136,12 +136,12 @@ lens = "red-team"
 web = "native"
 note = "$1.75/$14 - code specialist, do not use for non-code questions"
 
-[seats.sol-pro]
-model = "openai/gpt-5.6-sol-pro"
+[seats.astra]
+model = "openai/gpt-6-astra"
 effort = "high"
 lens = "red-team"
 web = "native"
-note = "$2/$10 - pro variant, for the max panel"
+note = "$10/$50 - 5x the sol seat, max panel only"
 
 [seats.grok-45]
 model = "x-ai/grok-4.6"
@@ -179,7 +179,7 @@ code     = ["sol", "codex", "fable"]
 decision = ["sol", "grok", "gemini", "fable"]
 writing  = ["fable", "kimi", "sol"]
 cheap    = ["glm", "deepseek", "grok"]
-max      = ["sol-pro", "gemini", "grok-45", "kimi", "fable"]
+max      = ["astra", "gemini", "grok-45", "kimi", "fable"]
 
 # Lens overrides per panel: seat keeps its model, swaps its job.
 [panel_lenses]
