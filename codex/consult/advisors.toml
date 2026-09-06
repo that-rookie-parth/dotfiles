@@ -1,0 +1,166 @@
+# Codex-only Consult roster. Never install as ~/.claude/advisors.toml.
+# kind="subagent" excludes GPT seats from the existing OpenRouter runner.
+# The Codex skill/adapter must execute these seats and combine their verdicts.
+# Model and effort choices apply only to Consult, never the main Codex session.
+
+[defaults]
+timeout = 240            # seconds per seat
+max_issues = 3           # cap on issues returned per advisor
+require_parameters = true  # never route to a provider that silently drops reasoning/schema params
+data_collection = "allow"  # flip to "deny" to avoid providers that may train on your data
+
+# Live web search. Only seats with web = "native" below can search; this default
+# exists so `--web` has something to switch on and is otherwise inert.
+#
+# Why native only, and never OpenRouter's exa fallback: exa builds its query from the
+# user message, which for us is a whole artifact. Measured with a 4KB artifact, exa
+# returned BBC coverage of a Russian strike near Kyiv and an Amazon data centre story,
+# and the advisor then answered wrong at HIGH confidence. Native search is model-driven
+# -- the advisor writes its own queries -- and every native seat tested got it right.
+#
+# Search is model-elected, so it only costs when it fires. Measured: on a
+# version-sensitive question grok went $0.005 -> $0.054 (22 citations) and gemini
+# $0.050 -> $0.127; on a pure-logic artifact needing no external facts, grok cited
+# nothing at $0.009 and gemini came in at $0.019 against a $0.053 offline baseline
+# -- i.e. below it, because reasoning-token variance is larger than the search fee.
+# So leaving this on costs roughly nothing on questions that do not need it, and a
+# few cents on the ones that do. --no-web forces every seat offline for a run.
+web = "native"
+
+
+
+[lenses]
+
+red-team = """
+You are the red team. Assume the proposal is wrong and look for the reason.
+Prioritise: incorrect assumptions, unhandled failure modes, security and data
+integrity, things that work now but break under load, concurrency or scale.
+Do not comment on style. Do not praise anything."""
+
+blast-radius = """
+You assess second-order consequences. What else does this touch that the
+author has not considered? Coupling, migration and rollback paths, downstream
+consumers, operational burden, what this costs to maintain in six months.
+You care about the system, not the change in isolation."""
+
+contrarian = """
+You interrogate the premise, not the execution. Is this the right problem?
+Is there a materially simpler option being skipped? What is the strongest
+honest case AGAINST doing this at all? If the premise is sound, say so
+plainly and move on -- do not manufacture disagreement."""
+
+conformance = """
+You check the proposal against what was actually asked for. Look for scope
+drift, requirements silently dropped, unstated assumptions, and answers to a
+question adjacent to the one posed. You are not judging quality, only fit."""
+
+prose = """
+You judge writing: clarity, structure, tone, and whether it lands with its
+intended reader. Flag padding, hedging, buried leads, and claims the text has
+not earned. Quote the specific line when you object."""
+
+correctness = """
+You verify reasoning step by step. Check logic, arithmetic, cited facts, and
+whether stated conclusions follow from stated premises. Flag anything asserted
+without support."""
+
+strategy = """
+You evaluate this as a decision under uncertainty. What does it cost if wrong,
+how reversible is it, what is the option value of waiting, and what is the
+cheapest experiment that would resolve the main uncertainty? Name the tradeoff
+being made, especially if the author has not."""
+
+
+
+[seats.sol]
+kind = "subagent"
+model = "gpt-5.6-sol"
+effort = "high"
+lens = "red-team"
+note = "Codex reviewer; never route through OpenRouter"
+
+[seats.gemini]
+model = "google/gemini-3.1-pro-preview"
+effort = "high"
+lens = "blast-radius"
+web = "native"             # searches, but returns no url_citation annotations
+note = "OpenRouter specialist; inherited from Claude roster"
+
+[seats.grok]
+model = "x-ai/grok-4.3"
+effort = "high"
+lens = "contrarian"
+web = "native"             # also searches X; cites heavily, ~20 sources per call
+note = "OpenRouter specialist; inherited from Claude roster"
+
+[seats.fable]
+model = "anthropic/claude-fable-5.1"
+effort = "high"
+lens = "conformance"
+note = "OpenRouter; separate API usage, no Claude Code subagent"
+
+[seats.kimi]
+model = "moonshotai/kimi-k3"
+effort = "high"
+lens = "prose"
+note = "OpenRouter specialist; inherited from Claude roster"
+
+[seats.muse]
+model = "meta/muse-spark-1.2"
+lens = "prose"
+note = "OpenRouter specialist; inherited from Claude roster"
+
+[seats.codex]
+kind = "subagent"
+model = "gpt-5.6-terra"
+effort = "high"
+lens = "correctness"
+note = "Codex coding reviewer; replaces unavailable gpt-5.3-codex seat"
+
+[seats.astra]
+kind = "subagent"
+model = "gpt-6-astra"
+effort = "high"
+lens = "red-team"
+note = "Codex reviewer for the max panel; replaces unavailable sol-pro seat"
+
+[seats.grok-45]
+model = "x-ai/grok-4.6"
+effort = "high"
+lens = "contrarian"
+web = "native"
+note = "OpenRouter specialist; inherited from Claude roster"
+
+[seats.glm]
+model = "z-ai/glm-5.2"
+effort = "high"
+lens = "correctness"
+quantizations = ["bf16", "fp8"]
+note = "OpenRouter specialist; inherited from Claude roster"
+
+[seats.deepseek]
+model = "deepseek/deepseek-v4-pro-0813"
+effort = "high"
+lens = "correctness"
+quantizations = ["bf16", "fp8"]
+note = "OpenRouter specialist; inherited from Claude roster"
+
+[seats.minimax]
+model = "minimax/minimax-m3"
+quantizations = ["bf16", "fp8"]
+lens = "correctness"
+note = "OpenRouter specialist; inherited from Claude roster"
+
+
+
+[panels]
+code     = ["sol", "codex", "fable", "gemini"]
+decision = ["sol", "grok", "gemini", "fable"]
+writing  = ["fable", "kimi", "sol"]
+cheap    = ["glm", "deepseek", "grok"]
+max      = ["astra", "gemini", "grok-45", "kimi", "fable"]
+
+# Lens overrides per panel: seat keeps its model, swaps its job.
+[panel_lenses]
+decision = { sol = "red-team", grok = "strategy", gemini = "blast-radius", fable = "conformance" }
+writing  = { sol = "correctness", kimi = "prose", fable = "prose" }

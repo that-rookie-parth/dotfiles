@@ -1,6 +1,9 @@
 # dotfiles
 
-Personal configuration files for Windows and Linux machines.
+The new [Codex setup](codex/README.md) lives in `codex/`. Its portable config and
+Consult roster are separate from Claude.
+
+Personal configuration files for macOS, Windows, and Linux machines.
 
 ## Structure
 
@@ -28,9 +31,13 @@ dotfiles/
 │   └── scripts/
 │       ├── setup.ps1            - run once on a new Windows machine to apply all configs
 │       └── update-extensions.ps1 - updates extensions only if N days have passed since release
-└── linux/
-    └── codex/
-        └── config.toml          - Codex CLI config (model, status line, plugins)
+└── codex/
+    ├── AGENTS.md                - link to shared claude/CLAUDE.md
+    ├── config.toml              - portable settings; no model defaults
+    ├── consult/advisors.toml    - Codex-only Consult roster
+    ├── README.md                - setup and ownership guide
+    ├── PLAN.md                  - implementation status
+    └── DECISIONS.md             - setup decisions
 ```
 
 ## Claude Code plugins
@@ -106,7 +113,8 @@ Run manually whenever you want to update — only updates extensions released mo
 | `windows/scripts/setup.ps1` | Change where files get copied, add new tools to install |
 | `windows/scripts/update-extensions.ps1` | Change the day threshold (default: 7 days) |
 | `windows/claude/statusline-command.py` | Add/remove sections in the Claude Code status line |
-| `linux/codex/config.toml` | Codex model/reasoning effort, `[tui] status_line` segments, feature flags, plugins |
+| `codex/config.toml` | Portable Codex settings and status-line segments; no model defaults |
+| `codex/consult/advisors.toml` | Consult reviewer models, routes, and panels |
 
 ## Notes
 
@@ -119,8 +127,8 @@ Run manually whenever you want to update — only updates extensions released mo
     it directly (`python3 /home/parth/dotfiles/...` under WSL,
     `/opt/homebrew/bin/python3 /Users/<you>/personal/dotfiles/...` on macOS). Editing the file here
     takes effect immediately, no copy step.
-  - **Codex** only reads `~/.codex/config.toml`, so `linux/codex/config.toml` is a reference copy.
-    Copy it into place on a new machine, then re-add the `[projects."/path"] trust_level` entries —
-    those are stripped here because they grant trusted execution on machine-specific paths.
+  - **Codex** has a portable baseline in `codex/config.toml`, verified against the live config.
+    Merge it into `~/.codex/config.toml`, preserving machine-local trust and app settings.
+    See [Codex setup](codex/README.md) for installation status.
 - `windows/claude/` is a historical location; that script is platform-agnostic (pure stdlib Python)
-  and actually runs under WSL and on macOS. New Linux-side configs go in `linux/`.
+  and actually runs under WSL and on macOS.

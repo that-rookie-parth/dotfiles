@@ -1,0 +1,18 @@
+# Portable Codex configuration.
+# Merge into ~/.codex/config.toml; preserve machine-local trust and app settings.
+# No model, reasoning defaults, or global CLAUDE.md discovery.
+approvals_reviewer = "auto_review"
+
+[features]
+memories = true
+
+[tui]
+status_line = [
+    "model-with-reasoning",
+    "run-state",
+    "context-remaining",
+    "five-hour-limit",
+    "weekly-limit",
+    "git-branch",
+    "task-progress",
+]
